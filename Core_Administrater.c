@@ -404,7 +404,7 @@ waitor* orderWaitorbycount()
 	}
 	else if (pf->next == NULL)
 	{
-		return pf->next;
+		return pf;
 	}
 	else
 	{
@@ -628,14 +628,24 @@ void UpdateWaitorsInfo() {
 	fprintf(fp, "%d %d %d\n", year, month, day);
 
 	waitor* temp = WaitorListHead->next;
-	while (temp) {
-		fprintf(fp, "%s %s %d\n", temp->name, temp->passwd, temp->sumofserve);
-		temp = temp->next;
+	while (temp != NULL) {
+		if (temp->sumofserve >= 0)
+		{
+			fprintf(fp, "%s %s %d\n", temp->name, temp->passwd, temp->sumofserve);
+			temp = temp->next;
+		}
+		else
+		{
+			temp->next = NULL;
+			break;
+		}
 	}
 	fclose(fp);
 }
 
 void LoadWaitors() {
+	WaitorListHead = (waitor*)malloc(sizeof(waitor));
+	WaitorListHead->next = NULL;
 	FILE* fp = fopen("WaitorsInfo.txt", "r");
 	if (fp == NULL)
 	{
@@ -1171,7 +1181,6 @@ void showcensusUI(foodnode* pHead)
 			}
 			break;
 		case 2:
-			LoadWaitors();
 			WaitorListHead->next = orderWaitorbycount();
 			UpdateWaitorsInfo();
 			LoadWaitors();
@@ -1244,12 +1253,12 @@ void ShowAdminMainUI(Adminnode* pHead)
 void ShowAdminLoginUI(Adminnode* pHead)
 {
 	system("cls");
-	printf("**********************服务员登录界面********************\n\n\n               请输入您的ID  >>>___________");
+	printf("**********************服务员登录界面********************\n\n\n               请输入您的ID   >>>___________");
 	int x = wherex(), y = wherey();
 	gotoxy(x - 11, y);
 	char ID[ADMINPAS_LENGTH_MAX];
 	scanf("%s", ID);
-	printf("\n               请输入您的密码    >>>___________");
+	printf("\n               请输入您的密码   >>>___________");
 	x = wherex(), y = wherey();
 	gotoxy(x - 11, y);
 	char password[ADMINPAS_LENGTH_MAX];

@@ -8,14 +8,14 @@ bool initializeSystem(int argc, char const* argv[])
     adminListHead = readAdminFromFile();
 
     // 读入所有服务员信息
-    WaitorListHead = (waitor*)malloc(sizeof(waitor));
-    WaitorListHead->next = NULL;
     LoadWaitors();
 
     // 读入所有菜品信息
-    foodsListHead = (foodnode*)malloc(sizeof(foodnode));
-    foodsListHead->next = NULL;
     LoadMyMenu();
+
+    // 订单链表
+    OrderListHead = (ordernode*)malloc(sizeof(ordernode));
+    OrderListHead->next = NULL;
 
     //设置控制台大小
     system("mode con cols=70 lines=40");

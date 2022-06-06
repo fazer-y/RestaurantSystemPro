@@ -24,7 +24,6 @@ void ExitWaitorMainUI();
 
 void InitWaitorList(waitor* head);
 void InitOrderList(ordernode* head);
-void InitFoodList(foodnode* head);
 void UpdateWaitorsNode();
 void Revereshow(foodnode* p);
 void ShowMenu();

@@ -17,9 +17,9 @@
 //食物名称 最大长度
 #define FOODNAME_LENGTH_MAX 30
 
-#define WaitorName_MaxLength 30
+#define WaitorName_MaxLength 50
 #define WaitorPasswd_MaxLength 10
-#define CustomerName_MaxLength 30
+#define CustomerName_MaxLength 50
 #define SumFoodsOfOrder_Max 50
 #define MaxWidthOfSeatsMap 10
 #define MaxHeightOfSeatsMap 10

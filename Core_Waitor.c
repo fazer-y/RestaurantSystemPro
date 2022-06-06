@@ -7,11 +7,6 @@ void InitOrderList(ordernode* head)
     head = (ordernode*)malloc(sizeof(ordernode));
 }
 
-void InitFoodList(foodnode* head)
-{
-    head = (foodnode*)malloc(sizeof(foodnode));
-}
-
 //设置字体颜色
 void color(const unsigned short textColor)
 {
@@ -393,47 +388,54 @@ void ShowUnCheckedOrderUI() {
     printf("==========================未结账订单界面=============================\n");
     ordernode* temp = OrderListHead->next;
 
-    while (temp) {
-        printf("顾客名:  %s\n", temp->order.name);
-        color(12);
-        printf("%-10s \t%-10s \t%-10s\n", "菜品", "数量", "单价");
-        color(7);
-        int sum[1000] = { 0 };
-        for (int i = 0; i < temp->order.sumoffood; i++) {
-            char id[50];
-            for (int j = 0; temp->order.foods[i][j + 1]; j++) {
-                id[j] = temp->order.foods[i][j + 1];
-            }
-            int index = atoi(id);
-            sum[index]++;
-
-        }
-        //统计完成
-        for (int i = 0; i < 1000; i++) {
-            if (sum[i] != 0) {
-                //将数字转化为#xxx，再找到菜名和价格
+    if (!temp)
+    {
+        printf("\n\t\t\t暂无未结账订单\n\n");
+    }
+    else
+    {
+        while (temp) {
+            printf("顾客名:  %s\n", temp->order.name);
+            color(12);
+            printf("%-10s \t%-10s \t%-10s\n", "菜品", "数量", "单价");
+            color(7);
+            int sum[1000] = { 0 };
+            for (int i = 0; i < temp->order.sumoffood; i++) {
                 char id[50];
-                sprintf(id, "#%03d", i);
-                char name[FOODNAME_LENGTH_MAX];
-                double price;
-                LoadMyMenu();
-                foodnode* temp = foodsListHead->next;
-                while (temp) {
-                    if (strcmp(temp->data.id, id) == 0)
-                    {
-                        strcpy(name, temp->data.name);
-                        price = temp->data.price;
-                        break;
-                    }
-                    temp = temp->next;
+                for (int j = 0; temp->order.foods[i][j + 1]; j++) {
+                    id[j] = temp->order.foods[i][j + 1];
                 }
-                //打印
-                printf("%-10s \t%-10d \t%-10.2lf\n", name, sum[i], price);
+                int index = atoi(id);
+                sum[index]++;
+
             }
+            //统计完成
+            for (int i = 0; i < 1000; i++) {
+                if (sum[i] != 0) {
+                    //将数字转化为#xxx，再找到菜名和价格
+                    char id[50];
+                    sprintf(id, "#%03d", i);
+                    char name[FOODNAME_LENGTH_MAX];
+                    double price;
+                    LoadMyMenu();
+                    foodnode* temp = foodsListHead->next;
+                    while (temp) {
+                        if (strcmp(temp->data.id, id) == 0)
+                        {
+                            strcpy(name, temp->data.name);
+                            price = temp->data.price;
+                            break;
+                        }
+                        temp = temp->next;
+                    }
+                    //打印
+                    printf("%-10s \t%-10d \t%-10.2lf\n", name, sum[i], price);
+                }
+            }
+            printf("\n累计:  %.2lf 元\n", temp->order.MoneyPaid);
+            printf("----------------------------------------------------------------\n");
+            temp = temp->next;
         }
-        printf("\n累计:  %.2lf 元\n", temp->order.MoneyPaid);
-        printf("----------------------------------------------------------------\n");
-        temp = temp->next;
     }
     system("pause");
     ShowWaitorMainUI();
@@ -580,83 +582,92 @@ void ShowCheckOutUI() {
     printf("==========================结账界面=============================\n");
     ordernode* temp = OrderListHead->next;
 
-    while (temp) {
-        printf("顾客名:  %s\n", temp->order.name);
-        color(12);
-        printf("%-10s \t%-10s \t%-10s\n", "菜品", "数量", "单价");
-        color(7);
-        int sum[1000] = { 0 };
-        for (int i = 0; i < temp->order.sumoffood; i++) {
-            char id[50];
-            for (int j = 0; temp->order.foods[i][j + 1]; j++) {
-                id[j] = temp->order.foods[i][j + 1];
-            }
-            int index = atoi(id);
-            sum[index]++;
-
-        }
-        //统计完成
-        for (int i = 0; i < 1000; i++) {
-            if (sum[i] != 0) {
-                //将数字转化为#xxx，再找到菜名和价格
+    if (!temp)
+    {
+        printf("\n\t\t\t暂无未结账订单\n\n");
+    }
+    else
+    {
+        while (temp) {
+            printf("顾客名:  %s\n", temp->order.name);
+            color(12);
+            printf("%-10s \t%-10s \t%-10s\n", "菜品", "数量", "单价");
+            color(7);
+            int sum[1000] = { 0 };
+            for (int i = 0; i < temp->order.sumoffood; i++) {
                 char id[50];
-                sprintf(id, "#%03d", i);
-                char name[FOODNAME_LENGTH_MAX];
-                double price;
-                LoadMyMenu();
-                foodnode* temp = foodsListHead->next;
-                while (temp) {
-                    if (strcmp(temp->data.id, id) == 0)
-                    {
-                        strcpy(name, temp->data.name);
-                        price = temp->data.price;
-                        break;
-                    }
-                    temp = temp->next;
+                for (int j = 0; temp->order.foods[i][j + 1]; j++) {
+                    id[j] = temp->order.foods[i][j + 1];
                 }
-                //打印
-                printf("%-10s \t%-10d \t%-10.2lf\n", name, sum[i], price);
+                int index = atoi(id);
+                sum[index]++;
+
+            }
+            //统计完成
+            for (int i = 0; i < 1000; i++) {
+                if (sum[i] != 0) {
+                    //将数字转化为#xxx，再找到菜名和价格
+                    char id[50];
+                    sprintf(id, "#%03d", i);
+                    char name[FOODNAME_LENGTH_MAX];
+                    double price;
+                    LoadMyMenu();
+                    foodnode* temp = foodsListHead->next;
+                    while (temp) {
+                        if (strcmp(temp->data.id, id) == 0)
+                        {
+                            strcpy(name, temp->data.name);
+                            price = temp->data.price;
+                            break;
+                        }
+                        temp = temp->next;
+                    }
+                    //打印
+                    printf("%-10s \t%-10d \t%-10.2lf\n", name, sum[i], price);
+                }
+            }
+            printf("\n累计:  %.2lf 元\n", temp->order.MoneyPaid);
+            printf("----------------------------------------------------------------\n");
+            temp = temp->next;
+        }
+
+        printf("=================================================================\n");
+        while (true) {
+            printf("\n请选择以下操作：\n");
+            printf("(1) 结账订单\n");
+            printf("(2) 查询订单\n");
+            printf("(3) 删除订单\n");
+            printf("(4) 修改订单\n");
+            printf("(5) 返回主界面\n");
+            printf("请输入操作序号： 【  】");
+            int x = wherex(), y = wherey();
+            gotoxy(x - 3, y);
+            int index;
+            scanf("%d", &index);
+            switch (index) {
+            case 1:
+                CheckOut();
+                break;
+            case 2:
+                SearchOrder();
+                break;
+            case 3:
+                DeletetheOrder();
+                break;
+            case 4:
+                ChangeOrder();//////////////////////////////////////test
+                break;
+            case 5:
+                ShowWaitorMainUI();
+                break;
+            default:
+                ShowWaitorMainUI();
+                break;
             }
         }
-        printf("\n累计:  %.2lf 元\n", temp->order.MoneyPaid);
-        printf("----------------------------------------------------------------\n");
-        temp = temp->next;
     }
-    printf("=================================================================\n");
-    while (true) {
-        printf("\n请选择以下操作：\n");
-        printf("(1) 结账订单\n");
-        printf("(2) 查询订单\n");
-        printf("(3) 删除订单\n");
-        printf("(4) 修改订单\n");
-        printf("(5) 返回主界面\n");
-        printf("请输入操作序号： 【  】");
-        int x = wherex(), y = wherey();
-        gotoxy(x - 3, y);
-        int index;
-        scanf("%d", &index);
-        switch (index) {
-        case 1:
-            CheckOut();
-            break;
-        case 2:
-            SearchOrder();
-            break;
-        case 3:
-            DeletetheOrder();
-            break;
-        case 4:
-            ChangeOrder();//////////////////////////////////////test
-            break;
-        case 5:
-            ShowWaitorMainUI();
-            break;
-        default:
-            ShowWaitorMainUI();
-            break;
-        }
-    }
-
+    system("pause");
+    ShowWaitorMainUI();
 }
 
 
@@ -819,9 +830,7 @@ void ShowWaitorMainUI() {
 
 void LoadUnDoneOrders()
 {
-    InitOrderList(OrderListHead);
-    OrderListHead = (ordernode*)malloc(sizeof(ordernode));
-    OrderListHead->next = NULL;
+    
     FILE* fp = fopen("UnDoneOrders.txt", "r");
     if (fp == NULL) {
         perror("读取文件失败");
@@ -925,8 +934,8 @@ void ShowWaitorLoginUI() {
 
 
 void LoadMyMenu() {
-    InitFoodList(foodsListHead);
-    
+    foodsListHead = (foodnode*)malloc(sizeof(foodnode));
+    foodsListHead->next = NULL;
     FILE* fp = fopen("menu.txt", "r");
     if (fp == NULL) {
         perror("文件读取失败");
