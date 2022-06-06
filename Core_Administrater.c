@@ -9,6 +9,10 @@
 #include "Core_Administrater.h"
 #include "Core_System.h"
 
+
+int HeightOfSeatsMap;
+int WidthOfSeatsMap;
+
 Adminnode* InitAdminTable()
 {
 	Adminnode* pHead;

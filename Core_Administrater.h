@@ -34,7 +34,8 @@ waitor* currentWaitor;
 foodnode* foodsListHead;
 ordernode* OrderListHead; //系统当前未结账订单头结点
 Order CurrentOrder;
-seat  SeatsMap[MaxHeightOfSeatsMap][MaxWidthOfSeatsMap];
+seat**  SeatsMap;
+
 
 
 
@@ -79,7 +80,9 @@ foodnode* readfoodFromFile(foodnode* pHead);
 bool writefoodIntoFile(foodnode* pHead);
 
 //根据服务员的服务量得到一个降序排序的有序链表
-waitor* orderWaitorbycount();   //-->应该是这个函数出了点问题，但我现在找不出来
+waitor* orderWaitorbycount();   
+//-->应该是这个函数出了点问题，但我现在找不出来
+// 已修复√
 
 //部分系统管理员UI界面
 //系统管理员登录
@@ -114,5 +117,9 @@ void updatefoodUI(foodnode* pHead);
 
 //统计分析
 void showcensusUI(foodnode* pHead);   //这里的第二个功能出现了点问题
+// 已修复
+
+// 座位管理
+
 
 #endif

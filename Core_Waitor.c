@@ -2,6 +2,9 @@
 #include "CORE_Waitor.h"
 #include "Core_System.h"
 
+int HeightOfSeatsMap;
+int WidthOfSeatsMap;
+
 void InitOrderList(ordernode* head)
 {
     head = (ordernode*)malloc(sizeof(ordernode));
@@ -57,14 +60,19 @@ void ShowOrderUI() {
 
 
 
-void LoadSeatsMap()
+void LoadSeatsMap(int rows, int cols)
 {
-    for (int i = 0; i < MaxHeightOfSeatsMap; i++)
-    {
-        for (int j = 0; j < MaxWidthOfSeatsMap; j++)
-        {
-            SeatsMap[i][j].col = i;
-            SeatsMap[i][j].row = j;
+    SeatsMap  = (seat**)malloc(sizeof(seat*) * rows);
+    int i;
+    for (i = 0; i < rows; i++) {
+        *(SeatsMap + i) = malloc(sizeof(seat) * cols);
+    }
+    int j = 0;
+    int k = 0;
+    for (i = 0; i < rows; i++) {
+        for (j = 0; j < cols; j++) {
+            SeatsMap[i][j].row = i;
+            SeatsMap[i][j].col = j;
             SeatsMap[i][j].IsSelected = 0;
         }
     }
@@ -72,15 +80,17 @@ void LoadSeatsMap()
 
 void ShowSeatMap()
 {
+
+    LoadSeatsMap(HeightOfSeatsMap, WidthOfSeatsMap);
     printf("===============餐厅实时座位图==================\n ");
-    for (int i = 0; i < MaxWidthOfSeatsMap; i++)
+    for (int i = 0; i < WidthOfSeatsMap; i++)
     {
         printf("  %d  ", i);
     }
-    for (int i = 0; i < MaxHeightOfSeatsMap; i++)
+    for (int i = 0; i < HeightOfSeatsMap; i++)
     {
         printf("\n%d", i);
-        for (int j = 0; j < MaxWidthOfSeatsMap; j++)
+        for (int j = 0; j < WidthOfSeatsMap; j++)
         {
             if (SeatsMap[i][j].IsSelected == 0)
             {
@@ -749,7 +759,7 @@ void ShowTakeOrderUI() {
     }
 
     ShowMenu();
-    printf("请输入菜品ID,以空格分割,按0结束输入 >>>  ");
+    printf("请输入菜品ID(以空格分割,按0结束,回车以输入) >>>  ");
     char id[10];
     while (scanf("%s", id)) {
         if (strcmp(id, "0") == 0)

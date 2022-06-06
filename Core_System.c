@@ -2,6 +2,9 @@
 #include "Core_System.h"
 #include "Core_Administrater.h"
 
+int HeightOfSeatsMap;
+int WidthOfSeatsMap;
+
 bool initializeSystem(int argc, char const* argv[])
 {
     // 读入所有系统管理员信息
@@ -16,6 +19,10 @@ bool initializeSystem(int argc, char const* argv[])
     // 订单链表
     OrderListHead = (ordernode*)malloc(sizeof(ordernode));
     OrderListHead->next = NULL;
+    
+    // 座位设置
+    HeightOfSeatsMap = MaxHeightOfSeatsMap;
+    WidthOfSeatsMap = MaxWidthOfSeatsMap;
 
     //设置控制台大小
     system("mode con cols=70 lines=40");

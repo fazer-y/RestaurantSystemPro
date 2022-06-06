@@ -62,9 +62,12 @@ typedef struct DateOfOrder
 typedef struct seat
 {
     int col;
-    int row;
+    int row;    
     int IsSelected;
 } seat;
+// ×ùÎ»Í¼·¶Î§
+extern int WidthOfSeatsMap;
+extern int HeightOfSeatsMap;
 
 typedef struct Order
 {

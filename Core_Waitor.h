@@ -33,7 +33,7 @@ void color(const unsigned short textColor);
 void SetColor();
 void AddOrdertoOrderList(Order* order);
 void SearchOrder();
-void LoadSeatsMap();
+void LoadSeatsMap(int rows, int cols);
 void ShowSeatMap();
 int CheckPasswd(char* name, char* passwd);
 void AddWaitorToList(char* name, char* passwd, int sumofserve);
