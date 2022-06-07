@@ -83,6 +83,7 @@ void ShowSeatMap()
             else
                 printf(" [1] ");
         }
+        p = p->next;
         printf("\n");
     }
     printf("\n===================================================\n");
