@@ -21,8 +21,6 @@
 #define WaitorPasswd_MaxLength 10
 #define CustomerName_MaxLength 50
 #define SumFoodsOfOrder_Max 50
-#define MaxWidthOfSeatsMap 10
-#define MaxHeightOfSeatsMap 10
 #define ForeColorIndex 7
 #define BackColorIndex 0
 
@@ -61,13 +59,19 @@ typedef struct DateOfOrder
 
 typedef struct seat
 {
-    int col;
-    int row;    
+    int captain;
+    int order;
     int IsSelected;
 } seat;
-// ×ùÎ»Í¼·¶Î§
-extern int WidthOfSeatsMap;
-extern int HeightOfSeatsMap;
+
+typedef struct tablenode
+{
+    seat* seatList;
+    int captainOfSeat;
+    int numOfSeat;
+    int useTimes;
+    tablenode* next;
+}tablenode;
 
 typedef struct Order
 {

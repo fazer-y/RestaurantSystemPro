@@ -60,48 +60,28 @@ void ShowOrderUI() {
 
 
 
-void LoadSeatsMap(int rows, int cols)
-{
-    SeatsMap  = (seat**)malloc(sizeof(seat*) * rows);
-    int i;
-    for (i = 0; i < rows; i++) {
-        *(SeatsMap + i) = malloc(sizeof(seat) * cols);
-    }
-    int j = 0;
-    int k = 0;
-    for (i = 0; i < rows; i++) {
-        for (j = 0; j < cols; j++) {
-            SeatsMap[i][j].row = i;
-            SeatsMap[i][j].col = j;
-            SeatsMap[i][j].IsSelected = 0;
-        }
-    }
-}
 
 void ShowSeatMap()
 {
-
-    LoadSeatsMap(HeightOfSeatsMap, WidthOfSeatsMap);
     printf("===============餐厅实时座位图==================\n ");
-    for (int i = 0; i < WidthOfSeatsMap; i++)
+    tablenode* p = tablesListHead->next;
+    if (p == NULL)
     {
-        printf("  %d  ", i);
+        printf("\n\t\t\t餐厅暂未配置餐桌！\n\n");
+        system("pause");
+        return;
     }
-    for (int i = 0; i < HeightOfSeatsMap; i++)
+    while (p != NULL)
     {
-        printf("\n%d", i);
-        for (int j = 0; j < WidthOfSeatsMap; j++)
+        printf("\t%d人餐桌\n", p->captainOfSeat);
+        for (int i = 0; i < p->numOfSeat; i++)
         {
-            if (SeatsMap[i][j].IsSelected == 0)
-            {
+            if(p->seatList[i].IsSelected == 0)
                 printf(" [ ] ");
-            }
             else
-            {
                 printf(" [1] ");
-            }
         }
-
+        printf("\n");
     }
     printf("\n===================================================\n");
 }
@@ -222,7 +202,7 @@ void deleteOrder(char* name) {
     ordernode* delnode = temp->next;
 
     if (delnode->order.DineInside == 1) {
-        SeatsMap[delnode->order.seat.col][delnode->order.seat.row].IsSelected = 0;//更新座位
+        resetSeat(delnode->order.seat.captain, delnode->order.seat.order);//更新座位
     }
     temp->next = delnode->next;
 }
@@ -736,7 +716,7 @@ void ShowTakeOrderUI() {
 
         while (SeatsMap[col][row].IsSelected == 1) {
             printf("\n该位置已被占用，请重新选择座位！");
-            printf("\n请选择桌号  【  】【  】");
+            printf("\n请选择餐桌容量及座次  【  】【  】");
             int x = wherex(), y = wherey();
             gotoxy(x - 10, y);
             scanf("%d", &col);
@@ -747,10 +727,10 @@ void ShowTakeOrderUI() {
 
 
         order->DineInside = 1;
-        order->seat.col = col;
-        order->seat.row = row;
+        order->seat.captain = col;
+        order->seat.order = row;
         //设置该桌已经被占用
-        SeatsMap[col][row].IsSelected = 1;
+ /*        = 1;*/
 
     }
     else
@@ -853,8 +833,8 @@ void LoadUnDoneOrders()
         int DineInside, col, row, nums;
         fscanf(fp, "%d %d %d %d", &DineInside, &col, &row, &nums);
         temp->DineInside = DineInside;
-        temp->seat.col = col;
-        temp->seat.row = row;
+        temp->seat.captain = col;
+        temp->seat.order = row;
         if (DineInside == 1) {
             SeatsMap[col][row].IsSelected = 1;
         }
@@ -895,7 +875,7 @@ void ReWriteUnDoneOrders() {
     }
     while (temp) {
         fprintf(fp, "%s", temp->order.name);
-        fprintf(fp, "\n%d %d %d %d", temp->order.DineInside, temp->order.seat.col, temp->order.seat.row, temp->order.numbers);
+        fprintf(fp, "\n%d %d %d %d", temp->order.DineInside, temp->order.seat.captain, temp->order.seat.order, temp->order.numbers);
         fprintf(fp, "\n%d\n", temp->order.sumoffood);
         for (int i = 0; i < temp->order.sumoffood; i++) {
             fprintf(fp, "%s ", temp->order.foods[i]);

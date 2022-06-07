@@ -2,8 +2,6 @@
 #include "Core_System.h"
 #include "Core_Administrater.h"
 
-int HeightOfSeatsMap;
-int WidthOfSeatsMap;
 
 bool initializeSystem(int argc, char const* argv[])
 {
@@ -21,8 +19,6 @@ bool initializeSystem(int argc, char const* argv[])
     OrderListHead->next = NULL;
     
     // 座位设置
-    HeightOfSeatsMap = MaxHeightOfSeatsMap;
-    WidthOfSeatsMap = MaxWidthOfSeatsMap;
 
     //设置控制台大小
     system("mode con cols=70 lines=40");

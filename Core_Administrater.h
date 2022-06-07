@@ -25,6 +25,9 @@
 //存放食品信息的文本文档
 #define FOOD_FILE_PATH "menu.txt"
 
+// 存放餐厅餐桌信息
+#define TABLE_FILE_PATH "table.txt"
+
 
 
 //初始化服务员链表
@@ -35,6 +38,7 @@ foodnode* foodsListHead;
 ordernode* OrderListHead; //系统当前未结账订单头结点
 Order CurrentOrder;
 seat**  SeatsMap;
+tablenode* tablesListHead;
 
 
 
@@ -119,7 +123,36 @@ void updatefoodUI(foodnode* pHead);
 void showcensusUI(foodnode* pHead);   //这里的第二个功能出现了点问题
 // 已修复
 
-// 座位管理
+// 餐桌管理
+void showAdminTableUI();
+//从文件中读取餐桌信息(相当于创建单链表操作)
+tablenode* readtableFromFile(tablenode* pHead);
+//将链表中餐桌信息写入文件
+bool writetableIntoFile(tablenode* pHead);
 
+// 初始化餐桌链表
+tablenode* initTableList();
+// 初始化座位数组
+seat* initSeatList(int captain, int length);
+// 添加餐桌结点
+bool addTableNode(tablenode* addNode);
+// 删除餐桌结点
+bool deleteTableNode(int captain);
 
+// 展示餐桌示意图
+void ShowTableUI();
+// 添加指定数量新类型餐桌
+bool addNewTableUI();
+// 删除某类型的餐桌
+bool removeTableTypeUI();
+// 添加指定数量某类型的餐桌
+bool increaseTableNumUI();
+// 减少指定数量某类型的餐桌
+bool decreaseTableNumUI();
+// 增加某类型餐桌的使用次数
+bool addTableUseTimes(int captain);
+// 统计餐桌使用频率并排序
+void orderTableUseTimes();
+// 重置座位属性
+bool resetSeat(int captain, int order);
 #endif

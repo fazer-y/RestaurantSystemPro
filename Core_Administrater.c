@@ -10,9 +10,6 @@
 #include "Core_System.h"
 
 
-int HeightOfSeatsMap;
-int WidthOfSeatsMap;
-
 Adminnode* InitAdminTable()
 {
 	Adminnode* pHead;
@@ -1157,7 +1154,8 @@ void showcensusUI(foodnode* pHead)
 	printf("\n请选择以下操作：\n");
 	printf("(1) 查看菜品销量前十\n");
 	printf("(2) 查找今日服务员服务量前三\n");
-	printf("(3) 返回主界面\n");
+	printf("(3) 查看餐桌使用情况排名\n");
+	printf("(4) 返回主界面\n");
 	while (true)
 	{
 		printf("请输入操作序号： 【  】");
@@ -1185,6 +1183,22 @@ void showcensusUI(foodnode* pHead)
 			}
 			break;
 		case 2:
+			WaitorListHead->next = orderWaitorbycount();
+			UpdateWaitorsInfo();
+			LoadWaitors();
+			temp = WaitorListHead->next;
+			printf("\n%-10s \t%-10s \t%-10s", "姓名", "密码", "今日服务数量");
+			count = 0;
+			while (temp)
+			{
+				if (count >= 3) break;
+				printf("\n%-10s \t%-10s \t%-10d", temp->name, temp->passwd, temp->sumofserve);
+				temp = temp->next;
+				count++;
+			}
+			printf("\n");
+			break;
+		case 3:
 			WaitorListHead->next = orderWaitorbycount();
 			UpdateWaitorsInfo();
 			LoadWaitors();
@@ -1242,7 +1256,7 @@ void ShowAdminMainUI(Adminnode* pHead)
 			showcensusUI(fHead);
 			break;
 		case 4:
-
+			showAdminTableUI(tablesListHead);
 			break;
 		case 5:
 
@@ -1257,12 +1271,12 @@ void ShowAdminMainUI(Adminnode* pHead)
 void ShowAdminLoginUI(Adminnode* pHead)
 {
 	system("cls");
-	printf("**********************服务员登录界面********************\n\n\n               请输入您的ID   >>>___________");
+	printf("**********************管理员登录界面********************\n\n\n               请输入您的ID   >>>___________");
 	int x = wherex(), y = wherey();
 	gotoxy(x - 11, y);
 	char ID[ADMINPAS_LENGTH_MAX];
 	scanf("%s", ID);
-	printf("\n               请输入您的密码   >>>___________");
+	printf("\n               请输入您的密码  >>>___________");
 	x = wherex(), y = wherey();
 	gotoxy(x - 11, y);
 	char password[ADMINPAS_LENGTH_MAX];
@@ -1281,5 +1295,308 @@ void ShowAdminLoginUI(Adminnode* pHead)
 		system("pause");
 		system("cls");
 		ShowAdminLoginUI(pHead);
+	}
+}
+
+// 餐桌管理
+void showAdminTableUI(tablenode* tHead)
+{
+	system("cls");
+	printf("========================餐桌管理界面===========================\n");
+	printf("\n请选择以下操作：\n");
+	printf("(1) 添加新餐桌类型及数量\n");
+	printf("(2) 移除旧餐桌类型\n");
+	printf("(3) 修改某类型餐桌数量\n");
+	printf("(4) 查看餐桌使用情况\n");
+	printf("(5) 返回主界面\n");
+	while (true)
+	{
+		printf("请输入操作序号： 【  】");
+		int x = wherex(), y = wherey();
+		gotoxy(x - 3, y);
+		int index;
+		int count = 0;
+		waitor* w, * temp;
+		tablenode* p = tHead;
+		Adminnode* ap = InitAdminTable();
+		scanf("%d", &index);
+		switch (index)
+		{
+		case 1:
+
+		case 2:
+			WaitorListHead->next = orderWaitorbycount();
+			UpdateWaitorsInfo();
+			LoadWaitors();
+			temp = WaitorListHead->next;
+			printf("\n%-10s \t%-10s \t%-10s", "姓名", "密码", "今日服务数量");
+			count = 0;
+			while (temp)
+			{
+				if (count >= 3) break;
+				printf("\n%-10s \t%-10s \t%-10d", temp->name, temp->passwd, temp->sumofserve);
+				temp = temp->next;
+				count++;
+			}
+			printf("\n");
+			break;
+		case 3:
+			WaitorListHead->next = orderWaitorbycount();
+			UpdateWaitorsInfo();
+			LoadWaitors();
+			temp = WaitorListHead->next;
+			printf("\n%-10s \t%-10s \t%-10s", "姓名", "密码", "今日服务数量");
+			count = 0;
+			while (temp)
+			{
+				if (count >= 3) break;
+				printf("\n%-10s \t%-10s \t%-10d", temp->name, temp->passwd, temp->sumofserve);
+				temp = temp->next;
+				count++;
+			}
+			printf("\n");
+			break;
+		default:
+			ap = readAdminFromFile(ap);
+			ShowAdminMainUI(ap);
+			break;
+		}
+	}
+}
+//从文件中读取餐桌信息(相当于创建单链表操作)
+tablenode* readtableFromFile(tablenode* pHead)
+{
+	FILE* fp;  // 文件指针
+	fp = fopen(TABLE_FILE_PATH, "a+");
+	// 判断文件是否能够正确打开 
+	if_Is_Null_Then_End_Program(fp);
+	// 从文件中读取食物信息
+	int numOfSeat = 0;
+	int captainOfSeat = 0;
+	int useTimes = 0;
+	tablesListHead = initTableList();
+	while (fscanf(fp, "%d %d %d", &captainOfSeat, &numOfSeat, &useTimes) != EOF)
+	{
+		tablenode t;
+		t.captainOfSeat = captainOfSeat;
+		t.numOfSeat = numOfSeat;
+		t.useTimes = useTimes;
+		t.seatList = initSeatList(captainOfSeat ,numOfSeat);
+		t.next = NULL;
+		addTableNode(&t);
+	}
+	//关闭文件
+	fclose(fp);
+	return tablesListHead;
+}
+//将链表中餐桌信息写入文件
+bool writetableIntoFile(tablenode* pHead)
+{
+	if (pHead == NULL) //空表则直接退出函数,无需写入
+	{
+		return false;
+	}
+	FILE* fp;  // 文件指针
+	fp = fopen(TABLE_FILE_PATH, "w+");
+	// 判断文件是否能够正确打开 
+	if_Is_Null_Then_End_Program(fp);
+	tablenode* p = pHead->next;
+	while (!(p == NULL))//遍历链表
+	{
+		fprintf(fp, "%d %d %d\n", p->captainOfSeat, p->numOfSeat, p->useTimes);
+		p = p->next;
+	}
+	// 刷新缓冲区，将缓冲区的内容写入文件 
+	fflush(fp);
+	// 重置文件内部位置指针，确保位置指针指向文件开头
+	rewind(fp);
+	return true;
+}
+
+// 初始化餐桌链表
+tablenode* initTableList()
+{
+	tablenode* head = (tablenode*)malloc(sizeof(tablenode));
+	head->seatList = NULL;
+	head->captainOfSeat = 0;  
+	head->next = NULL;
+	head->useTimes = 0;
+	head->numOfSeat = 0;	// 存储餐桌类型数量
+	return head;
+}
+
+// 初始化座位数组
+seat* initSeatList(int captain, int length)
+{
+	seat* list = (seat*)malloc(sizeof(seat) * length);
+	for (int i = 0; i < length; i++)
+	{
+		list[i].captain = captain;
+		list[i].order = i + 1;
+		list[i].IsSelected = 0;
+	}
+	return list;
+}
+
+// 添加餐桌结点
+bool addTableNode(tablenode* addNode)
+{
+	tablenode* p = tablesListHead->next;
+	while (p->next != NULL)
+	{
+		p = p->next;
+	}
+	addNode->next = p->next;
+	p->next = addNode;
+	tablesListHead->numOfSeat--;
+	printf("添加成功！");
+	system("pause");
+	return true;
+}
+
+// 删除餐桌结点
+bool deleteTableNode(int captain)
+{
+	tablenode* p = tablesListHead->next;
+	tablenode* pre = tablesListHead;
+	// 查找指定类型餐桌
+	while (p != NULL && p->captainOfSeat == captain)
+	{
+		pre = p;
+		p = p->next;
+	}
+	if (p != NULL)
+	{
+		// 删除结点
+		pre->next = p->next;
+		tablesListHead->numOfSeat--;
+		return true;
+	}
+	else
+	{
+		printf("\n无该类型餐桌，请检查后再次操作！\n");
+		system("pause");
+		return false;
+	}
+}
+
+// 展示餐桌示意图
+void ShowTableUI()
+{
+	printf("===============餐厅座位图==================\n ");
+	tablenode* p = tablesListHead->next;
+	if (p == NULL)
+	{
+		printf("\n\t\t\t餐厅暂未配置餐桌！\n\n");
+		system("pause");
+		return;
+	}
+	while (p != NULL)
+	{
+		printf("\t%d人餐桌\t使用次数：%d\n", p->captainOfSeat, p->useTimes);
+		for (int i = 0; i < p->numOfSeat; i++)
+		{
+			printf(" [ ] ");
+		}
+		printf("\n\n");
+	}
+}
+
+// 添加指定数量新类型餐桌
+bool addNewTableUI()
+{
+	// 展示当前餐厅餐桌情况
+	ShowTableUI();
+	printf("=========================================\n ");
+	printf("请输入餐桌可坐人数及添加数量(空格分隔)：\b\b");
+	int captain, num;
+	scanf("%d %d", &captain, &num);
+	if (captain > 0 && num > 0)
+	{
+		tablenode* newNode = (tablenode*)malloc(sizeof(tablenode));
+		newNode->captainOfSeat = captain;
+		newNode->useTimes = 0;
+		newNode->numOfSeat = num;
+		newNode->seatList = (seat*)malloc(sizeof(seat));
+		newNode->next = NULL;
+		if (addTableNode(newNode))
+		{
+			prinft("添加成功！\n");
+			system("pause");
+		}
+		else
+		{
+			prinft("添加失败，请重试！\n");
+			system("pause");
+			return false;
+		}
+		return true;
+	}
+	else 
+	{
+		prinft("餐桌容量及餐桌数量必须为正整数，请检查后重试！\n");
+		system("pause");
+		return false;
+	}
+}
+
+// 删除某类型的餐桌
+bool removeTableTypeUI()
+{
+
+}
+// 添加指定数量某类型的餐桌
+bool increaseTableNumUI()
+{
+}
+// 减少指定数量某类型的餐桌
+bool decreaseTableNumUI()
+{
+}
+// 增加某类型餐桌的使用次数
+bool addTableUseTimes(int captain)
+{
+	tablenode* p = tablesListHead->next;
+	// 查找指定类型餐桌
+	while (p != NULL && p->captainOfSeat == captain)
+	{
+		p = p->next;
+	}
+	if (p != NULL)
+	{
+		p->useTimes++;
+		return true;
+	}
+	else
+	{
+		printf("\n无该类型餐桌，请检查后再次操作！\n");
+		system("pause");
+		return false;
+	}
+}
+
+
+// 统计餐桌使用频率并排序
+void orderTableUseTimes();
+
+// 重置座位属性
+bool resetSeat(int captain, int order)
+{
+	tablenode* p = tablesListHead->next;
+	// 查找指定类型餐桌
+	while (p != NULL && p->captainOfSeat == captain)
+	{
+		p = p->next;
+	}
+	if (p != NULL)
+	{
+		p->seatList[order].IsSelected = 0;
+		return true;
+	}
+	else
+	{
+		printf("\n无该餐桌，请检查后再次操作！\n");
+		system("pause");
+		return false;
 	}
 }

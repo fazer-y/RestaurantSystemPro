@@ -158,6 +158,7 @@
     <Text Include="..\..\..\Desktop\C\RestaurantSystem\Files\menu.txt" />
     <Text Include="..\..\..\Desktop\C\RestaurantSystem\Files\UnDoneOrders.txt" />
     <Text Include="..\..\..\Desktop\C\RestaurantSystem\Files\WaitorsInfo.txt" />
+    <Text Include="table.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
