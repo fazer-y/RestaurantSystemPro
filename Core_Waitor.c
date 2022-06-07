@@ -714,7 +714,7 @@ void ShowTakeOrderUI() {
         //设置订单属性
 
 
-        while (SeatsMap[col][row].IsSelected == 1) {
+        while (isSelected(col, row) == 1) {
             printf("\n该位置已被占用，请重新选择座位！");
             printf("\n请选择餐桌容量及座次  【  】【  】");
             int x = wherex(), y = wherey();
@@ -730,8 +730,7 @@ void ShowTakeOrderUI() {
         order->seat.captain = col;
         order->seat.order = row;
         //设置该桌已经被占用
- /*        = 1;*/
-
+        setSelected(col, row);
     }
     else
     {
@@ -770,7 +769,7 @@ void ShowWaitorMainUI() {
     printf("            |        (3) 查看订单             |            \n");
     printf("            |        (4) 结账                 |            \n");
     printf("            |        (5) 查看座位             |            \n");
-    printf("            |        (6) 查看未结账订单       |            \n");
+    printf("            |        (6) 查看未结账订单        |            \n");
     printf("            |        (7) 退出                 |            \n");
     printf("             ---------------------------------             \n\n\n");
     printf("***********************************************************\n\n");
@@ -836,7 +835,7 @@ void LoadUnDoneOrders()
         temp->seat.captain = col;
         temp->seat.order = row;
         if (DineInside == 1) {
-            SeatsMap[col][row].IsSelected = 1;
+            setSelected(col, row);
         }
         temp->isCheckedout = 0;
         temp->numbers = nums;

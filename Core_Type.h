@@ -70,7 +70,7 @@ typedef struct tablenode
     int captainOfSeat;
     int numOfSeat;
     int useTimes;
-    tablenode* next;
+    struct tablenode* next;
 }tablenode;
 
 typedef struct Order

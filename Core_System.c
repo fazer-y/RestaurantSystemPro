@@ -19,6 +19,7 @@ bool initializeSystem(int argc, char const* argv[])
     OrderListHead->next = NULL;
     
     // 座位设置
+    tablesListHead = readtableFromFile();
 
     //设置控制台大小
     system("mode con cols=70 lines=40");

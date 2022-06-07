@@ -37,7 +37,6 @@ waitor* currentWaitor;
 foodnode* foodsListHead;
 ordernode* OrderListHead; //系统当前未结账订单头结点
 Order CurrentOrder;
-seat**  SeatsMap;
 tablenode* tablesListHead;
 
 
@@ -124,9 +123,9 @@ void showcensusUI(foodnode* pHead);   //这里的第二个功能出现了点问题
 // 已修复
 
 // 餐桌管理
-void showAdminTableUI();
+void showAdminTableUI(tablenode* tHead);
 //从文件中读取餐桌信息(相当于创建单链表操作)
-tablenode* readtableFromFile(tablenode* pHead);
+tablenode* readtableFromFile();
 //将链表中餐桌信息写入文件
 bool writetableIntoFile(tablenode* pHead);
 
@@ -152,7 +151,15 @@ bool decreaseTableNumUI();
 // 增加某类型餐桌的使用次数
 bool addTableUseTimes(int captain);
 // 统计餐桌使用频率并排序
-void orderTableUseTimes();
+tablenode* orderTableByUseTimes();
+// 显示餐桌使用次数排序表
+void ShowTableUseTimesUI(tablenode* orderList);
 // 重置座位属性
 bool resetSeat(int captain, int order);
+// 调整某类型餐桌的数量
+seat* resizeSeatList(seat* seatList, int changeNum);
+// 判断某类型第order个座位是否为空
+bool isSelected(int captain, int order);
+// 标记座位已选择
+void setSelected(int captain, int order);
 #endif
