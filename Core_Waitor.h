@@ -54,5 +54,4 @@ void Revereshow(foodnode* p);
 void PrintfWaitorsInfo();
 void DeleteWaitorOfList(char* name);
 void UpdateCountofFood(char* id);
-int WaitorMain();
 #endif

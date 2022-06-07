@@ -46,15 +46,17 @@ void ShowOrderUI() {
     FILE* fp = fopen("DoneOrders.txt", "r");
     char name[30];
     int year, month, date;
-    double moneypaid;
+    double moneypaid, sum = 0.0;
     int count = 0;
-    while (5 == fscanf(fp, "%s %d %d %d %lf", name, &year, &month, &date, &moneypaid)) {
+    while (5 == fscanf(fp, "%s %d %d %d %lf", name, &year, &month, &date, &moneypaid))
+    {
+        sum += moneypaid;
         printf("%-10d \t%-10s  \t%d年%d月%d日 \t%-10.2lf\n", ++count, name, year, month, date, moneypaid);
     }
+    printf("订单总金额共计: %.2f元\n", sum);
     printf("\n============================================================");
     printf("\n按任意键返回主界面");
     system("pause");
-    ShowWaitorMainUI();
 }
 
 
@@ -290,7 +292,7 @@ void CheckOut() {
         perror("文件读取失败");
         return;
     }
-    fprintf(fp, "%s %d %d %d %.2lf", ordertocheck->order.name, ordertocheck->order.date.year, ordertocheck->order.date.month, ordertocheck->order.date.day, ordertocheck->order.MoneyPaid);
+    fprintf(fp, "%s %d %d %d %.2lf\n", ordertocheck->order.name, ordertocheck->order.date.year, ordertocheck->order.date.month, ordertocheck->order.date.day, ordertocheck->order.MoneyPaid);
     fclose(fp);
     free(ordertocheck);
 }
@@ -428,7 +430,6 @@ void ShowUnCheckedOrderUI() {
         }
     }
     system("pause");
-    ShowWaitorMainUI();
 }
 
 //修改订单所有函数
@@ -645,7 +646,7 @@ void ShowCheckOutUI() {
                 DeletetheOrder();
                 break;
             case 4:
-                ChangeOrder();//////////////////////////////////////test
+                ChangeOrder();
                 break;
             case 5:
                 ShowWaitorMainUI();
@@ -657,7 +658,6 @@ void ShowCheckOutUI() {
         }
     }
     system("pause");
-    ShowWaitorMainUI();
 }
 
 
@@ -722,6 +722,20 @@ void ShowTakeOrderUI() {
             scanf("%d", &col);
             gotoxy(x - 3, y);
             scanf("%d", &row);
+            if (col < num)
+            {
+                printf("! 当前选择餐桌类型容量小于用餐人数，是否重新选择？（1/0）:");
+                int option = 0;
+                scanf("%d", &option);
+                if (option)
+                {
+                    continue;
+                }
+                else
+                {
+                    addTableUseTimes(col);
+                }
+            }
         }
 
 
@@ -738,7 +752,7 @@ void ShowTakeOrderUI() {
     }
 
     ShowMenu();
-    printf("请输入菜品ID(以空格分割,按0结束,回车以输入) >>>  ");
+    printf("请输入菜品ID(如#001,以空格分割,按0结束,回车以输入) >>>  \n");
     char id[10];
     while (scanf("%s", id)) {
         if (strcmp(id, "0") == 0)
@@ -751,7 +765,6 @@ void ShowTakeOrderUI() {
 
     printf("\n按任意键返回主界面:");
     system("pause");
-    ShowWaitorMainUI();
 }
 
 
@@ -761,19 +774,19 @@ void ExitWaitorMainUI() {
 }
 
 void ShowWaitorMainUI() {
-    system("cls");
-    printf("***********************服务员主界面************************\n\n\n");
-    printf("             ---------------------------------             \n\n");
-    printf("            |        (1) 查看菜单             |            \n");
-    printf("            |        (2) 点餐                 |            \n");
-    printf("            |        (3) 查看订单             |            \n");
-    printf("            |        (4) 结账                 |            \n");
-    printf("            |        (5) 查看座位             |            \n");
-    printf("            |        (6) 查看未结账订单        |            \n");
-    printf("            |        (7) 退出                 |            \n");
-    printf("             ---------------------------------             \n\n\n");
-    printf("***********************************************************\n\n");
     while (true) {
+        system("cls");
+        printf("***********************服务员主界面************************\n\n\n");
+        printf("             ---------------------------------             \n\n");
+        printf("            |        (1) 查看菜单             |            \n");
+        printf("            |        (2) 点餐                 |            \n");
+        printf("            |        (3) 查看订单             |            \n");
+        printf("            |        (4) 结账                 |            \n");
+        printf("            |        (5) 查看座位             |            \n");
+        printf("            |        (6) 查看未结账订单        |            \n");
+        printf("            |        (7) 退出                 |            \n");
+        printf("             ---------------------------------             \n\n\n");
+        printf("***********************************************************\n\n");
         printf("请选择操作序号 【  】");
         int x = wherex(), y = wherey();
         gotoxy(x - 3, y);
@@ -785,7 +798,6 @@ void ShowWaitorMainUI() {
             system("cls");
             ShowMenu();
             system("pause");
-            ShowWaitorMainUI();
             break;
         case 2:
             system("cls");
@@ -803,7 +815,6 @@ void ShowWaitorMainUI() {
             break;
         case 6:
             ShowUnCheckedOrderUI();
-
             break;
         case 7:
             ExitWaitorMainUI();
@@ -858,7 +869,7 @@ void LoadUnDoneOrders()
         int month = p->tm_mon + 1;
         temp->date.year = year;
         temp->date.month = month;
-        temp->date.day = day;;
+        temp->date.day = day;
 
         AddOrdertoOrderList(temp);
     }
@@ -1016,15 +1027,4 @@ void ShowMenu() {
     foodnode* p = foodsListHead->next;
     Revereshow(p);
     printf("\n===================================================================\n");
-}
-
-
-
-int WaitorMain() {
-    LoadWaitors();
-    LoadMyMenu();
-    LoadUnDoneOrders();
-    ShowWaitorLoginUI();
-    ShowManageWaitorsUI();
-    return 1;
 }

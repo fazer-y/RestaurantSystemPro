@@ -162,4 +162,11 @@ seat* resizeSeatList(seat* seatList, int changeNum);
 bool isSelected(int captain, int order);
 // 标记座位已选择
 void setSelected(int captain, int order);
+
+// 订单浏览
+void showOrderBrowseUI();
+// 按日期展示订单
+void showOrderByDate();
+// 按日期查询订单
+void searchOrderByDate(int year, int month, int day);
 #endif

@@ -7,6 +7,7 @@
  */
 #define _CRT_SECURE_NO_WARNINGS
 #include "Core_Administrater.h"
+#include "Core_Waitor.h"
 #include "Core_System.h"
 
 
@@ -1259,7 +1260,7 @@ void ShowAdminMainUI(Adminnode* pHead)
 			showAdminTableUI(tablesListHead);
 			break;
 		case 5:
-
+			showOrderBrowseUI();
 			break;
 		case 6:
 			ShowAdminLoginUI(pHead);
@@ -1493,7 +1494,7 @@ void ShowTableUI()
 	}
 	while (p != NULL)
 	{
-		printf("\t%d人餐桌\t使用次数：%d\n", p->captainOfSeat, p->useTimes);
+		printf("%10d人餐桌\t\t使用次数：%d\n", p->captainOfSeat, p->useTimes);
 		for (int i = 0; i < p->numOfSeat; i++)
 		{
 			printf("[ ] ");
@@ -1831,4 +1832,123 @@ void ShowTableUseTimesUI(tablenode* orderList)
 	printf("\n");
 	system("pause");
 	return;
+}
+
+// 订单
+void showOrderBrowseUI()
+{
+	while (true)
+	{
+		system("cls");
+		printf("=======================订单浏览界面=========================\n");
+		printf("\n请选择以下操作：\n");
+		printf("(1) 浏览已完成订单\n");
+		printf("(2) 浏览未完成订单\n");
+		printf("(3) 按日期查看已完成订单\n");
+		printf("(4) 按日期查询已完成订单\n");
+		printf("(5) 返回主界面\n");
+		printf("请输入操作序号： 【  】");
+		int x = wherex(), y = wherey();
+		gotoxy(x - 4, y);
+		int index;
+		int count = 0;
+		Adminnode* ap = InitAdminTable();
+		scanf("%d", &index);
+		switch (index)
+		{
+		case 1:
+			ShowOrderUI();
+			break;
+		case 2:
+			ShowUnCheckedOrderUI();
+			break;
+		case 3:
+			showOrderByDate();
+			break;
+		case 4:
+			printf("请输入日期（年月日,空格分隔）：");
+			int year, month, day;
+			scanf("%d %d %d", &year, &month, &day);
+			if (year > 0 && day > 0 && month > 0)
+			{
+				searchOrderByDate(year, month, day);
+			}
+			else
+			{
+				printf("\n日期格式有误，请检查后重新输入！\n");
+				system("pause");
+			}
+			break;
+		default:
+			ap = readAdminFromFile(ap);
+			ShowAdminMainUI(ap);
+			break;
+		}
+	}
+}
+
+// 按日期展示订单
+void showOrderByDate()
+{
+	system("cls");
+	printf("======================订单浏览界面============================\n\n");
+	//显示DoneOrders
+	FILE* fp = fopen("DoneOrders.txt", "r");
+	char name[30];
+	int year = 0, month = 0, date = 0;
+	double moneypaid, sum = 0;
+	fscanf(fp, "%s %d %d %d %lf", name, &year, &month, &date, &moneypaid);
+	int nowY = year, nowM = month, nowD = date;
+	rewind(fp);
+	printf("\n------------------%d年%d月%d日------------------\n", nowY, nowM, nowD);
+	printf("%-10s \t%-10s \t%-10s\n", "序号", "顾客姓名", "支付金额");
+	int count = 0;
+	while (5 == fscanf(fp, "%s %d %d %d %lf", name, &year, &month, &date, &moneypaid))
+	{
+		if (year == nowY && month == nowM && nowD == date)
+		{
+			sum += moneypaid;
+			printf("%-10d \t%-10s  \t%-10.2lf\n", ++count, name, moneypaid);
+		}
+		else
+		{
+			printf("订单总金额共计: %.2f元\n", sum);
+			printf("-----------------------------------------------\n\n");
+			printf("------------------%d年%d月%d日------------------\n", nowY, nowM, nowD);
+			printf("%-10s \t%-10s \t%-10s\n", "序号", "顾客姓名", "支付金额");
+			printf("%-10d \t%-10s  \t%-10.2lf\n", ++count, name, moneypaid);
+			nowD = date, nowM = month, nowY = year;
+			count = 1;
+			sum = moneypaid;  // 重置每日总金额
+		}
+	}
+	
+	printf("\n============================================================\n\n");
+	system("pause");
+}
+
+// 按日期查询订单
+void searchOrderByDate(int syear, int smonth, int sday)
+{
+	system("cls");
+	printf("======================订单浏览界面============================\n");
+	printf("%-10s \t%-10s \t%-10s\n", "序号", "顾客姓名", "支付金额");
+	//显示DoneOrders
+	FILE* fp = fopen("DoneOrders.txt", "r");
+	char name[30];
+	int nowY = 0, nowM = 0, nowD = 0;
+	int year, month, date;
+	double moneypaid, sum = 0;
+	int count = 0;
+	while (5 == fscanf(fp, "%s %d %d %d %lf", name, &year, &month, &date, &moneypaid))
+	{
+		if (syear == year && smonth == month && sday == date)
+		{
+			sum += moneypaid;
+			printf("%-10d \t%-10s  \t%-10.2lf\n", ++count, name, moneypaid);
+		}
+	}
+	printf("%d年%d月%d日订单总金额共计: %.2f元\n", syear, smonth, sday, sum);
+	printf("\n============================================================\n");
+	system("pause");
 }
