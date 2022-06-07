@@ -65,6 +65,7 @@ void ShowOrderUI() {
 
 void ShowSeatMap()
 {
+    system("cls");
     printf("===============餐厅实时座位图==================\n ");
     tablenode* p = tablesListHead->next;
     if (p == NULL)
@@ -87,6 +88,7 @@ void ShowSeatMap()
         printf("\n");
     }
     printf("\n===================================================\n");
+    system("pause");
 }
 
 
@@ -702,41 +704,54 @@ void ShowTakeOrderUI() {
     char select[2];
     scanf("%s", select);
 
+    int col, row;
     if (strcmp(select, "a") == 0)
     {
-        ShowSeatMap();
-        printf("请选择桌号  【  】【  】");
-        int x = wherex(), y = wherey();
-        gotoxy(x - 10, y);
-        int col, row;
-        scanf("%d", &col);
-        gotoxy(x - 3, y);
-        scanf("%d", &row);
-        //设置订单属性
-
-
-        while (isSelected(col, row) == 1) {
-            printf("\n该位置已被占用，请重新选择座位！");
-            printf("\n请选择餐桌容量及座次  【  】【  】");
+        while (true)
+        {
+            ShowSeatMap();
+            printf("请选择桌号  【  】【  】");
             int x = wherex(), y = wherey();
             gotoxy(x - 10, y);
+            
             scanf("%d", &col);
             gotoxy(x - 3, y);
             scanf("%d", &row);
+            //设置订单属性
+
+
+            while (isSelected(col, row) == 1) 
+            {
+                printf("\n该位置已被占用，请重新选择座位！");
+                printf("\n请选择餐桌容量及座次  【  】【  】");
+                int x = wherex(), y = wherey();
+                gotoxy(x - 10, y);
+                scanf("%d", &col);
+                gotoxy(x - 3, y);
+                scanf("%d", &row);
+            }
             if (col < num)
             {
-                printf("! 当前选择餐桌类型容量小于用餐人数，是否重新选择？（1/0）:");
-                int option = 0;
-                scanf("%d", &option);
-                if (option)
+                printf("\n! 当前选择餐桌类型容量小于用餐人数，是否重新选择？（y/n）:__\b");
+                getchar();
+                char option = 0;
+                scanf("%c", &option);
+                if (option == 'y' || option == 'Y')
                 {
                     continue;
                 }
                 else
                 {
                     addTableUseTimes(col);
+                    break;
                 }
             }
+            else
+            {
+                addTableUseTimes(col);
+                break;
+            }
+
         }
 
 
@@ -746,6 +761,7 @@ void ShowTakeOrderUI() {
         order->seat.order = row;
         //设置该桌已经被占用
         setSelected(col, row);
+        writetableIntoFile(tablesListHead);
     }
     else
     {
@@ -820,7 +836,7 @@ void ShowWaitorMainUI() {
         case 7:
             ExitWaitorMainUI();
             ShowWaitorLoginUI();
-            break;
+            return;
         default:
             continue;
         }
@@ -903,11 +919,15 @@ void ShowWaitorLoginUI() {
 
 
     system("cls");
-    printf("************************服务员登录界面**********************\n\n\n               请输入您的账户名  >>>___________");
+    printf("************************服务员登录界面**********************\n（账户名输入-1返回角色选择界面）\n\n               请输入您的账户名  >>>___________");
     int x = wherex(), y = wherey();
     gotoxy(x - 11, y);
     char name[WaitorName_MaxLength];
     scanf("%s", name);
+    if (strcmp(name, "-1") == 0)
+    {
+        return;  // 返回角色选择界面
+    }
     printf("\n               请输入您的密码    >>>___________");
     x = wherex(), y = wherey();
     gotoxy(x - 11, y);

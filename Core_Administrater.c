@@ -1264,7 +1264,7 @@ void ShowAdminMainUI(Adminnode* pHead)
 			break;
 		case 6:
 			ShowAdminLoginUI(pHead);
-			break;
+			return;
 		}
 	}
 }
@@ -1272,14 +1272,18 @@ void ShowAdminMainUI(Adminnode* pHead)
 void ShowAdminLoginUI(Adminnode* pHead)
 {
 	system("cls");
-	printf("**********************管理员登录界面********************\n\n\n               请输入您的ID   >>>___________");
+	printf("**********************管理员登录界面********************\n（ID输入-1返回角色选择界面）\n\n               请输入您的ID   >>>___________");
 	int x = wherex(), y = wherey();
-	gotoxy(x - 11, y);
+	gotoxy(x - 10, y);
 	char ID[ADMINPAS_LENGTH_MAX];
 	scanf("%s", ID);
+	if (strcmp(ID, "-1") == 0)
+	{
+		return;  // 返回角色选择界面
+	}
 	printf("\n               请输入您的密码 >>>___________");
 	x = wherex(), y = wherey();
-	gotoxy(x - 11, y);
+	gotoxy(x - 10, y);
 	char password[ADMINPAS_LENGTH_MAX];
 	scanf("%s", password);
 	Adminnode* currentAdmin = findAdminByID(pHead, ID);
@@ -1665,7 +1669,7 @@ bool addTableUseTimes(int captain)
 {
 	tablenode* p = tablesListHead->next;
 	// 查找指定类型餐桌
-	while (p != NULL && p->captainOfSeat == captain)
+	while (p != NULL && p->captainOfSeat != captain)
 	{
 		p = p->next;
 	}

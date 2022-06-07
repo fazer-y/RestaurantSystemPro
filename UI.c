@@ -21,16 +21,17 @@ enum UserType ShowWelcomeUI()
     enum UserType userType = undefine;
     int typeInput = 0;
     system("cls");
-    while (!(userType == Administrator || userType == Waiter))
+    while (true)
     {
+        system("cls");
         printf("################## 蟹堡王餐厅 ##################\n\n");
         printf("\t\t请选择您的身份\n\n\n");
         printf("\t\t1) 服务员登录.\n\n");
         printf("\t\t2) 系统管理员登录.\n\n");
+        printf("\t\t3) 退出系统.\n\n");
         printf("请输入你的身份对应的序号: [ ]\b\b");
         scanf("%d", &typeInput);
         clearScreenBuffer();
-        system("cls");
         if (typeInput == 1)
         {
             ShowWaitorLoginUI();
@@ -39,6 +40,12 @@ enum UserType ShowWelcomeUI()
         {
             printf("########## 蟹堡王餐厅 ##########\n\n");
             ShowAdminLoginUI(adminListHead);
+        }
+        else
+        {
+            system("cls");
+            printf("\n\n\n\n\n\n\t\t\t  感谢您的使用！\n\n\n\n\n\n");
+            exit(1);
         }
     }
     return userType;
