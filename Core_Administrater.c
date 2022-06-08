@@ -932,7 +932,7 @@ void updateAdminUI(Adminnode* pHead)
 			writeAdminIntoFile(pHead);
 			break;
 		case 3:
-			printf("将性别名年龄为："); scanf("%d", an->data.age);
+			printf("将性别名年龄为："); scanf("%d", &an->data.age);
 			pHead = updateAdminByID(pHead, ID, an->data);
 			writeAdminIntoFile(pHead);
 		default:
@@ -1152,15 +1152,15 @@ void showAdminfoodUI(foodnode* pHead)
 
 void showcensusUI(foodnode* pHead)
 {
-	system("cls");
-	printf("========================统计分析界面===========================\n");
-	printf("\n请选择以下操作：\n");
-	printf("(1) 查看菜品销量前十\n");
-	printf("(2) 查找今日服务员服务量前三\n");
-	printf("(3) 查看餐桌使用情况排名\n");
-	printf("(4) 返回主界面\n");
 	while (true)
 	{
+		system("cls");
+		printf("========================统计分析界面===========================\n");
+		printf("\n请选择以下操作：\n");
+		printf("(1) 查看菜品销量前十\n");
+		printf("(2) 查找今日服务员服务量前三\n");
+		printf("(3) 查看餐桌使用情况排名\n");
+		printf("(4) 返回主界面\n");
 		printf("请输入操作序号： 【  】");
 		int x = wherex(), y = wherey();
 		gotoxy(x - 3, y);
@@ -1168,6 +1168,7 @@ void showcensusUI(foodnode* pHead)
 		int count = 0;
 		waitor* w, * temp;
 		foodnode* p = pHead;
+		tablenode* orderTableListHead;
 		Adminnode* ap = InitAdminTable();
 		scanf("%d", &index);
 		switch (index)
@@ -1202,20 +1203,9 @@ void showcensusUI(foodnode* pHead)
 			printf("\n");
 			break;
 		case 3:
-			WaitorListHead->next = orderWaitorbycount();
-			UpdateWaitorsInfo();
-			LoadWaitors();
-			temp = WaitorListHead->next;
-			printf("\n%-10s \t%-10s \t%-10s", "姓名", "密码", "今日服务数量");
-			count = 0;
-			while (temp)
-			{
-				if (count >= 3) break;
-				printf("\n%-10s \t%-10s \t%-10d", temp->name, temp->passwd, temp->sumofserve);
-				temp = temp->next;
-				count++;
-			}
-			printf("\n");
+			orderTableListHead = orderTableByUseTimes();
+			ShowTableUseTimesUI(orderTableListHead);
+			readtableFromFile();
 			break;
 		default:
 			ap = readAdminFromFile(ap);
@@ -1273,36 +1263,39 @@ void ShowAdminMainUI(Adminnode* pHead)
 
 void ShowAdminLoginUI(Adminnode* pHead)
 {
-	system("cls");
-	printf("**********************管理员登录界面********************\n（ID输入-1返回角色选择界面）\n\n               请输入您的ID   >>>___________");
-	int x = wherex(), y = wherey();
-	gotoxy(x - 10, y);
-	char ID[ADMINPAS_LENGTH_MAX];
-	scanf("%s", ID);
-	if (strcmp(ID, "-1") == 0)
+	while (true)
 	{
-		return;  // 返回角色选择界面
-	}
-	printf("\n               请输入您的密码 >>>___________");
-	x = wherex(), y = wherey();
-	gotoxy(x - 10, y);
-	char password[ADMINPAS_LENGTH_MAX];
-	scanf("%s", password);
-	Adminnode* currentAdmin = findAdminByID(pHead, ID);
-	if (currentAdmin != NULL && strcmp(currentAdmin->data.password, password) == 0)
-	{
-		printf("\n\n\n登录成功!\n\n");
-		system("pause");
 		system("cls");
-		ShowAdminMainUI(pHead);
+		printf("**********************管理员登录界面********************\n（ID输入-1返回角色选择界面）\n\n               请输入您的ID   >>>___________");
+		int x = wherex(), y = wherey();
+		gotoxy(x - 10, y);
+		char ID[ADMINPAS_LENGTH_MAX];
+		scanf("%s", ID);
+		if (strcmp(ID, "-1") == 0)
+		{
+			break;  // 返回角色选择界面
+		}
+		printf("\n               请输入您的密码 >>>___________");
+		x = wherex(), y = wherey();
+		gotoxy(x - 10, y);
+		char password[ADMINPAS_LENGTH_MAX];
+		scanf("%s", password);
+		Adminnode* currentAdmin = findAdminByID(pHead, ID);
+		if (currentAdmin != NULL && strcmp(currentAdmin->data.password, password) == 0)
+		{
+			printf("\n\n\n登录成功!\n\n");
+			system("pause");
+			system("cls");
+			ShowAdminMainUI(pHead);
+		}
+		else
+		{
+			printf("\n\n\nError>>>账户名不存在或密码输入错误，请重新输入！\n\n");
+			system("pause");
+			continue;
+		}
 	}
-	else
-	{
-		printf("\n\n\nError>>>账户名不存在或密码输入错误，请重新输入！\n\n");
-		system("pause");
-		system("cls");
-		ShowAdminLoginUI(pHead);
-	}
+	
 }
 
 // 餐桌管理
@@ -1500,7 +1493,7 @@ void ShowTableUI()
 	}
 	while (p != NULL)
 	{
-		printf("%10d人餐桌\t\t使用次数：%d\n", p->captainOfSeat, p->useTimes);
+		printf("%10d人餐桌\t已有数量：%d\t使用次数：%d\n", p->captainOfSeat, p->numOfSeat, p->useTimes);
 		for (int i = 0; i < p->numOfSeat; i++)
 		{
 			printf("[ ] ");
