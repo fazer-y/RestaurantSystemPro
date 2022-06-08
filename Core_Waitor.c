@@ -411,7 +411,7 @@ void ShowUnCheckedOrderUI() {
                     char id[50];
                     sprintf(id, "#%03d", i);
                     char name[FOODNAME_LENGTH_MAX];
-                    double price;
+                    double price = 0.0;
                     LoadMyMenu();
                     foodnode* temp = foodsListHead->next;
                     while (temp) {
@@ -709,6 +709,7 @@ void ShowTakeOrderUI() {
     {
         while (true)
         {
+            system("cls");
             ShowSeatMap();
             printf("请选择桌号  【  】【  】");
             int x = wherex(), y = wherey();
@@ -718,27 +719,35 @@ void ShowTakeOrderUI() {
             gotoxy(x - 3, y);
             scanf("%d", &row);
             //设置订单属性
+            int isSelect = isSelected(col, row);
 
-
-            while (isSelected(col, row) == 1) 
+            if (isSelect == 1 || isSelect == 0)
             {
-                printf("\n该位置已被占用，请重新选择座位！");
-                printf("\n请选择餐桌容量及座次  【  】【  】");
-                int x = wherex(), y = wherey();
-                gotoxy(x - 10, y);
-                scanf("%d", &col);
-                gotoxy(x - 3, y);
-                scanf("%d", &row);
-            }
-            if (col < num)
-            {
-                printf("\n! 当前选择餐桌类型容量小于用餐人数，是否重新选择？（y/n）:__\b");
-                getchar();
-                char option = 0;
-                scanf("%c", &option);
-                if (option == 'y' || option == 'Y')
+                while (isSelected(col, row) == 1)
                 {
-                    continue;
+                    printf("\n该位置已被占用，请重新选择座位！");
+                    printf("\n请选择餐桌容量及座次  【  】【  】");
+                    int x = wherex(), y = wherey();
+                    gotoxy(x - 10, y);
+                    scanf("%d", &col);
+                    gotoxy(x - 3, y);
+                    scanf("%d", &row);
+                }
+                if (col < num)
+                {
+                    printf("\n! 当前选择餐桌类型容量小于用餐人数，是否重新选择？（y/n）:__\b");
+                    getchar();
+                    char option = 0;
+                    scanf("%c", &option);
+                    if (option == 'y' || option == 'Y')
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        addTableUseTimes(col);
+                        break;
+                    }
                 }
                 else
                 {
@@ -746,12 +755,10 @@ void ShowTakeOrderUI() {
                     break;
                 }
             }
-            else
+            else if(isSelect == -1)
             {
-                addTableUseTimes(col);
-                break;
+                continue;
             }
-
         }
 
 
@@ -768,19 +775,27 @@ void ShowTakeOrderUI() {
         order->DineInside = 0;
     }
 
-    ShowMenu();
-    printf("请输入菜品ID(如#001,以空格分割,按0结束,回车以输入) >>>  \n");
-    char id[10];
-    while (scanf("%s", id)) {
-        if (strcmp(id, "0") == 0)
-            break;
-        strcpy(order->foods[order->sumoffood++], id);
-        order->MoneyPaid += getPriceoffood(id);
-    }
+        ShowMenu();
+        printf("请输入菜品ID(如#001,以空格分割,按0结束,回车以输入) >>>  \n");
+        char id[10];
+        while (scanf("%s", id)) {
+            if (strcmp(id, "0") == 0)
+                break;
+            if (getNameofFood(id) != NULL)
+            {
+                strcpy(order->foods[order->sumoffood++], id);
+                order->MoneyPaid += getPriceoffood(id);
+            }
+            else
+            {
+                printf("\n您所点菜品中，本餐厅暂无（%s）菜品，非常抱歉。\n", id);
+                system("pause");
+            }
+        }
+    
     //订单设置完成
     AddOrdertoOrderList(order);//加入系统正在处理的订单链表中
-
-    printf("\n按任意键返回主界面:");
+    printf("\n点餐完成！\n");
     system("pause");
 }
 

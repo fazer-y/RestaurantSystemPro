@@ -1775,21 +1775,31 @@ bool resetSeat(int captain, int order)
 }
 
 // 判断某类型第order个座位是否为空
-bool isSelected(int captain, int order)
+int isSelected(int captain, int order)
 {
 	tablenode* p = tablesListHead->next;
 	while (p != NULL && p->captainOfSeat != captain)
 	{
 		p = p->next;
 	}
-	if (p->seatList[order].IsSelected == 1)
+	if (p != NULL)
 	{
-		return true;
+		if (p->seatList[order].IsSelected == 1)
+		{
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
 	}
 	else
 	{
-		return false;
+		printf("\n暂无该类型餐桌（%d人桌），请重新选择！\n", captain);
+		system("pause");
+		return -1;
 	}
+	
 }
 
 // 标记座位已选择

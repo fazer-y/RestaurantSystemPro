@@ -159,7 +159,7 @@ bool resetSeat(int captain, int order);
 // 调整某类型餐桌的数量
 seat* resizeSeatList(seat* seatList, int changeNum);
 // 判断某类型第order个座位是否为空
-bool isSelected(int captain, int order);
+int isSelected(int captain, int order);
 // 标记座位已选择
 void setSelected(int captain, int order);
 
