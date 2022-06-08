@@ -47,3 +47,28 @@ void gotoxy(int x, int y)
     c.Y = y - 1;
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
 }
+
+//设置字体颜色
+void color(const unsigned short textColor)
+{
+    if (textColor >= 0 && textColor <= 15)
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), textColor);
+    else
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 7);
+}
+
+//设置字体前景色和背景色
+void SetColor()
+{
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
+        (BackColorIndex << 4) + ForeColorIndex);
+}
+
+void if_Is_Null_Then_End_Program(void* ptr)
+{
+    if (ptr == NULL)
+    {
+        printf("程序发生错误 !\n即将退出程序...\n");
+        exit(EXIT_FAILURE);
+    }
+}

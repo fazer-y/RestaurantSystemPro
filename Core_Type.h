@@ -1,61 +1,7 @@
 #pragma once
-#ifndef __CORE_TYPE_H_
-#define __CORE_TYPE_H_
 
-//系统管理员账号 最大长度
-#define ADMINID_LENGTH_MAX 15
-//系统管理员密码 最大长度
-#define ADMINPAS_LENGTH_MAX 20
-//系统管理员姓名 最大长度
-#define ADMINNAME_LENGTH_MAX 10
-
-//服务员姓名 最大长度
-#define WaitorName_MaxLength 30
-//服务员密码 最大长度
-#define WaitorPasswd_MaxLength 10
-
-//食物名称 最大长度
-#define FOODNAME_LENGTH_MAX 30
-
-#define WaitorName_MaxLength 50
-#define WaitorPasswd_MaxLength 10
-#define CustomerName_MaxLength 50
-#define SumFoodsOfOrder_Max 50
-#define ForeColorIndex 7
-#define BackColorIndex 0
-
-//系统管理员
-typedef struct Admin
-{
-    char ID[ADMINPAS_LENGTH_MAX];
-    char password[ADMINPAS_LENGTH_MAX];
-    char name[ADMINNAME_LENGTH_MAX];
-    char sex[10];
-    int age;
-} Admin;
-
-//链表节点(系统管理员)
-typedef struct Adminnode
-{
-    struct Admin data;
-    struct Adminnode* next;
-    int number; //总数量
-} Adminnode;
-
-typedef struct waitor
-{
-    char name[WaitorName_MaxLength];
-    char passwd[WaitorPasswd_MaxLength];
-    int sumofserve;
-    struct waitor* next;
-} waitor;
-
-typedef struct DateOfOrder
-{
-    int year;
-    int month;
-    int day;
-} DateOfOrder;
+// 存放餐厅餐桌信息
+#define TABLE_FILE_PATH "table.txt"
 
 typedef struct seat
 {
@@ -73,24 +19,12 @@ typedef struct tablenode
     struct tablenode* next;
 }tablenode;
 
-typedef struct Order
-{
-    char name[CustomerName_MaxLength];
-    int DineInside;
-    int numbers; //用餐人数
-    char foods[50][50];
-    int sumoffood;
-    double MoneyPaid;
-    int isCheckedout; //是否结账
-    DateOfOrder date;
-    seat seat;
-} Order;
 
-typedef struct OrderNode
-{
-    Order order;
-    struct OrderNode* next;
-} ordernode;
+//存放食品信息的文本文档
+#define FOOD_FILE_PATH "menu.txt"
+
+//食物名称 最大长度
+#define FOODNAME_LENGTH_MAX 30
 
 //食物类型
 enum foodType
@@ -121,4 +55,81 @@ typedef struct foodnode
     int number; //总数量
 } foodnode;
 
-#endif
+//存放已完成订单信息的文本文档
+#define DO_FILE_PATH "DoneOrders.txt"
+
+//存放未完成订单信息的文本文档
+#define UNDO_FILE_PATH "UnDoneOrders.txt"
+
+#define CustomerName_MaxLength 50
+#define SumFoodsOfOrder_Max 50
+
+typedef struct DateOfOrder
+{
+    int year;
+    int month;
+    int day;
+} DateOfOrder;
+
+
+typedef struct Order
+{
+    char name[CustomerName_MaxLength];
+    int DineInside;
+    int numbers; //用餐人数
+    char foods[50][50];
+    int sumoffood;
+    double MoneyPaid;
+    int isCheckedout; //是否结账
+    DateOfOrder date;
+    seat seat;
+} Order;
+
+typedef struct OrderNode
+{
+    Order order;
+    struct OrderNode* next;
+} ordernode;
+
+//服务员姓名 最大长度
+#define WaitorName_MaxLength 30
+//服务员密码 最大长度
+#define WaitorPasswd_MaxLength 10
+
+typedef struct waitor
+{
+    char name[WaitorName_MaxLength];
+    char passwd[WaitorPasswd_MaxLength];
+    int sumofserve;
+    struct waitor* next;
+} waitor;
+
+//存放系统管理员信息的文本文档
+#define ADMIN_FILE_PATH "admin.txt"
+
+
+//系统管理员账号 最大长度
+#define ADMINID_LENGTH_MAX 15
+//系统管理员密码 最大长度
+#define ADMINPAS_LENGTH_MAX 20
+//系统管理员姓名 最大长度
+#define ADMINNAME_LENGTH_MAX 10
+
+
+//系统管理员
+typedef struct Admin
+{
+    char ID[ADMINPAS_LENGTH_MAX];
+    char password[ADMINPAS_LENGTH_MAX];
+    char name[ADMINNAME_LENGTH_MAX];
+    char sex[10];
+    int age;
+} Admin;
+
+//链表节点(系统管理员)
+typedef struct Adminnode
+{
+    struct Admin data;
+    struct Adminnode* next;
+    int number; //总数量
+} Adminnode;

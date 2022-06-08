@@ -140,16 +140,22 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Core_Administrater.c" />
+    <ClCompile Include="Core_foodManage.c" />
+    <ClCompile Include="Core_orderManage.c" />
     <ClCompile Include="Core_System.c" />
+    <ClCompile Include="Core_tableManage.c" />
     <ClCompile Include="Core_Waitor.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="UI.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core_Administrater.h" />
+    <ClInclude Include="Core_orderManage.h" />
     <ClInclude Include="Core_System.h" />
     <ClInclude Include="Core_Type.h" />
     <ClInclude Include="Core_Waitor.h" />
+    <ClInclude Include="Core_foodManage.h" />
+    <ClInclude Include="Core_tableManage.h" />
     <ClInclude Include="UI.h" />
   </ItemGroup>
   <ItemGroup>

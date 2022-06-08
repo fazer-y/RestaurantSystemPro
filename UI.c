@@ -1,26 +1,9 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include "UI.h"
-#include "CORE_System.h"
-#include "Core_Waitor.h"
-#include "Core_Administrater.h"
 
-int ShowMainUI()
+void ShowWelcomeUI()
 {
-    printf("111");
-    return 1;
-}
-
-void clearScreenBuffer(void)
-{
-    char c;
-    while ((c = getchar()) != EOF && c != '\n');
-}
-
-enum UserType ShowWelcomeUI()
-{
-    enum UserType userType = undefine;
     int typeInput = 0;
-    system("cls");
     while (true)
     {
         system("cls");
@@ -31,7 +14,6 @@ enum UserType ShowWelcomeUI()
         printf("\t\t3) 退出系统.\n\n");
         printf("请输入你的身份对应的序号: [ ]\b\b");
         scanf("%d", &typeInput);
-        clearScreenBuffer();
         if (typeInput == 1)
         {
             ShowWaitorLoginUI();
@@ -48,5 +30,4 @@ enum UserType ShowWelcomeUI()
             exit(1);
         }
     }
-    return userType;
 }
