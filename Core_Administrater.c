@@ -1092,10 +1092,12 @@ void updatefoodUI(foodnode* pHead)
 			printf("将其价格为："); scanf("%lf", &an->data.price);
 			pHead = updatefoodByid(pHead, an->data.id, an->data);
 			writefoodIntoFile(pHead);
+			break;
 		case 5:
 			pHead = deletefoodByID(pHead, an->data.id);
 			printf("删除成功!\n");
 			writefoodIntoFile(pHead);
+			break;
 		default:
 			showAdminfoodUI(pHead);
 			break;
