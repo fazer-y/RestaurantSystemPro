@@ -539,13 +539,13 @@ void ShowTakeOrderUI() {
     //增加服务员服务人员的数量
     currentWaitor->sumofserve += num;
 
-    printf("店内用餐请按 a\n打包带走请按 b\n预定店内用餐请按 c\n>>>");
+    printf("店内用餐请按 a\n打包带走请按 b\n>>>");
     char select[2];
     scanf("%s", select);
 
     // 预定或店内用餐选座
     int col, row;
-    if (strcmp(select, "a") == 0 || strcmp(select, "c") == 0)
+    if (strcmp(select, "a") == 0)
     {
         while (true)
         {
@@ -600,15 +600,7 @@ void ShowTakeOrderUI() {
                 continue;
             }
         }
-
-        if (strcmp(select, "c") == 0)
-        {
-            order->DineInside = 2;
-        }
-        else
-        {
-            order->DineInside = 1;
-        }
+        order->DineInside = 1;
         
         order->seat.captain = col;
         order->seat.order = row;

@@ -463,7 +463,7 @@ void ShowAdminLoginUI(Adminnode* pHead)
 		scanf("%s", ID);
 		if (strcmp(ID, "-1") == 0)
 		{
-			break;  // 返回角色选择界面
+			ShowWelcomeUI();  // 返回角色选择界面
 		}
 		printf("\n               请输入您的密码 >>>___________");
 		x = wherex(), y = wherey();

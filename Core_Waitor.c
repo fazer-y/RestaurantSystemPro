@@ -138,7 +138,7 @@ void ShowWaitorLoginUI() {
     scanf("%s", name);
     if (strcmp(name, "-1") == 0)
     {
-        return;  // 返回角色选择界面
+        ShowWelcomeUI();  // 返回角色选择界面
     }
     printf("\n               请输入您的密码    >>>___________");
     x = wherex(), y = wherey();
