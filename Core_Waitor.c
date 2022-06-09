@@ -205,16 +205,12 @@ void UpdateWaitorsInfo() {
 
     waitor* temp = WaitorListHead->next;
     while (temp != NULL) {
-        if (temp->sumofserve >= 0)
+        if (temp->sumofserve >= 0 && temp->sumofserve != 7143523)
         {
             fprintf(fp, "%s %s %d\n", temp->name, temp->passwd, temp->sumofserve);
-            temp = temp->next;
+            
         }
-        else
-        {
-            temp->next = NULL;
-            break;
-        }
+        temp = temp->next;
     }
     fclose(fp);
 }
@@ -373,6 +369,8 @@ void showWaitorManageUI(Adminnode* pHead)
     printf("(2) 更新服务员信息\n");
     printf("(3) 浏览全体服务员\n");
     printf("(4) 返回主界面\n");
+
+    char name[WaitorName_MaxLength];
     while (true)
     {
         printf("请输入操作序号： 【  】");
@@ -383,10 +381,23 @@ void showWaitorManageUI(Adminnode* pHead)
         switch (index)
         {
         case 1:
-            printf("\n请输入您要添加的服务员姓名 >>>_________");
-            gotoxy(wherex() - 6, wherey());
-            char name[WaitorName_MaxLength];
-            scanf("%s", name);
+            while (true)
+            {
+                printf("\n请输入您要添加的服务员姓名 >>>_________");
+                gotoxy(wherex() - 6, wherey());
+                
+                scanf("%s", name);
+                waitor* temp = getWaitorByName(name);
+                if (temp != NULL)
+                {
+                    printf("\n服务员姓名已存在，请检查后重新输入！\n");
+                    continue;
+                }
+                else
+                {
+                    break;
+                }
+            }
             printf("\n请输入服务员登录密码 >>>_________");
             char passwd[WaitorPasswd_MaxLength];
             gotoxy(wherex() - 6, wherey());

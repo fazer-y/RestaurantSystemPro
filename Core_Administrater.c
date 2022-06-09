@@ -4,7 +4,7 @@
 
 Adminnode* InitAdminTable()
 {
-	Adminnode* pHead;
+	Adminnode* pHead = (Adminnode*)malloc(sizeof(Adminnode));
 	pHead = NULL;
 	return pHead;
 }
@@ -204,7 +204,19 @@ void addAdminUI(Adminnode* pHead)
 	printf("========================添加系统管理员==========================\n");
 	printf("请输入欲添加系统管理员的信息:\n");
 	Admin a;
-	printf("ID："); scanf("%s", a.ID);
+	while (true)
+	{
+		printf("ID："); scanf("%s", a.ID);
+		if (findAdminByID(pHead, a.ID) != NULL)
+		{
+			printf("管理员ID已存在，请检查后重新输入！\n");
+			continue;
+		}
+		else
+		{
+			break;
+		}
+	}
 	printf("密码："); scanf("%s", a.password);
 	printf("姓名："); scanf("%s", a.name);
 	printf("性别："); scanf("%s", a.sex);
@@ -364,7 +376,8 @@ void showcensusUI(foodnode* pHead)
 		switch (index)
 		{
 		case 1:
-
+			system("cls");
+			p = orderfoodbycount(p);
 			printf("%-10s\t%-10s\t%-5s\t%-5s\t%-7s\n", "食品id", "食品名称", "食品类型", "被点次数", "价格");
 			while (!(p == NULL))//遍历链表
 			{
@@ -375,8 +388,11 @@ void showcensusUI(foodnode* pHead)
 				p = p->next;
 				count++;
 			}
+			printf("\n==========================================\n");
+			system("pause");
 			break;
 		case 2:
+			system("cls");
 			WaitorListHead->next = orderWaitorbycount();
 			UpdateWaitorsInfo();
 			LoadWaitors();
@@ -386,11 +402,15 @@ void showcensusUI(foodnode* pHead)
 			while (temp)
 			{
 				if (count >= 3) break;
-				printf("\n%-10s \t%-10s \t%-10d", temp->name, temp->passwd, temp->sumofserve);
+				if (temp->sumofserve != 7143523)
+				{
+					printf("\n%-10s \t%-10s \t%-10d", temp->name, temp->passwd, temp->sumofserve);
+					count++;
+				}
 				temp = temp->next;
-				count++;
 			}
-			printf("\n");
+			printf("\n==========================================\n");
+			system("pause");
 			break;
 		case 3:
 			orderTableListHead = orderTableByUseTimes();

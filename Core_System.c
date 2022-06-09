@@ -2,7 +2,7 @@
 #include "Core_System.h"
 #include "Core_Administrater.h"
 
-
+// 系统初始化
 bool initializeSystem(int argc, char const* argv[])
 {
     // 读入所有系统管理员信息

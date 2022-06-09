@@ -160,6 +160,18 @@ bool addNewTableUI()
 	{
 		tablenode* newNode = (tablenode*)malloc(sizeof(tablenode));
 		newNode->captainOfSeat = captain;
+
+		tablenode* p = tablesListHead->next;
+		while (p != NULL && p->captainOfSeat != captain)
+			p = p->next;
+		if (p != NULL)
+		{
+			resizeSeatList(p->captainOfSeat, p->numOfSeat + num);  // 容量已存在，增加数量
+			printf("添加成功！\n");
+			system("pause");
+			return true;
+		}
+
 		newNode->useTimes = 0;
 		newNode->numOfSeat = num;
 		newNode->seatList = (seat*)malloc(sizeof(seat));

@@ -478,13 +478,24 @@ void addfoodUI(foodnode* pHead)
 	printf("========================添加菜品===========================\n");
 	printf("请输入欲添加菜品的信息:\n");
 	food a;
-	printf("ID："); scanf("%s", a.id);
+	while (true)
+	{
+		printf("ID："); scanf("%s", a.id);
+		if (findfoodByid(pHead, a.id) != NULL)
+		{
+			printf("菜品ID已存在，请检查后重新输入！\n");
+			continue;
+		}
+		else
+			break;
+	}
+	
 	printf("菜名："); scanf("%s", a.name);
 	char foodtype[20];
-	printf("种类："); scanf("%s", foodtype);
+	printf("种类（热菜、凉菜、饮料、汤品、主食、招牌菜）："); scanf("%s", foodtype);
 	a.foodtype = switchstoenum(foodtype);
 	printf("价格："); scanf("%lf", &a.price);
-	printf("销量："); scanf("%d", &a.orderCount);
+	a.orderCount = 0;
 	pHead = addfood(pHead, a);
 	writefoodIntoFile(pHead);
 	printf("添加成功\n\n");
