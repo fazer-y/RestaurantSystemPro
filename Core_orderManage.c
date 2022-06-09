@@ -334,7 +334,6 @@ void CheckOut() {
     free(ordertocheck);
 }
 
-
 void DeleteOrderUI() {
     printf("\n请输入您要删除的订单的顾客名>>>__________");
     int x = wherex(), y = wherey();
@@ -355,8 +354,6 @@ void DeleteOrderUI() {
     system("pause");
 
 }
-
-
 
 void ShowUnCheckedOrderUI() {
     system("cls");
@@ -414,10 +411,6 @@ void ShowUnCheckedOrderUI() {
     }
     system("pause");
 }
-
-
-
-
 
 void ShowCheckOutUI() {
     system("cls");
@@ -510,8 +503,6 @@ void ShowCheckOutUI() {
     }
     system("pause");
 }
-
-
 
 void ShowTakeOrderUI() {
     system("cls");
@@ -654,7 +645,6 @@ void ShowTakeOrderUI() {
     system("pause");
 }
 
-
 void ShowOrderUI() {
     system("cls");
     printf("======================订单界面============================\n");
@@ -764,8 +754,10 @@ void showOrderByDate()
             sum = moneypaid;  // 重置每日总金额
         }
     }
+    printf("订单总金额共计: %.2f元\n", sum);
+    printf("-----------------------------------------------\n\n");
 
-    printf("\n============================================================\n\n");
+    printf("============================================================\n\n");
     system("pause");
 }
 

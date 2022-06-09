@@ -225,6 +225,7 @@ bool removeTableTypeUI()
 		return false;
 	}
 }
+
 // 添加指定数量某类型的餐桌
 bool increaseTableNumUI()
 {
@@ -263,6 +264,7 @@ bool increaseTableNumUI()
 		return false;
 	}
 }
+
 // 减少指定数量某类型的餐桌
 bool decreaseTableNumUI()
 {
@@ -301,6 +303,7 @@ bool decreaseTableNumUI()
 		return false;
 	}
 }
+
 // 增加某类型餐桌的使用次数
 bool addTableUseTimes(int captain)
 {
@@ -322,7 +325,6 @@ bool addTableUseTimes(int captain)
 		return false;
 	}
 }
-
 
 // 统计餐桌使用频率并排序
 tablenode* orderTableByUseTimes()
@@ -484,7 +486,6 @@ void ShowTableUseTimesUI(tablenode* orderList)
 	system("pause");
 	return;
 }
-
 
 void ShowSeatMap()
 {
